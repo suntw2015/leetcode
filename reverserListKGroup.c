@@ -1,30 +1,30 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "LinkList.h"
 
 struct ListNode* reverseKGroup(struct ListNode* head, int k) {
-    ListNode *tmp,*pre,*next,*cur,*preGroup,*start,*end;
+    ListNode *tmp,*pre,*next,*cur,*preGroup,*nextGroup,*start,*end,*newHead;
     int i;
 
     if (head == NULL) {
         return head;
     }
 
-    preGroup = tmp = pre = cur = next = NULL;
+    newHead = preGroup = tmp = pre = cur = next = NULL;
     i = 1;
 
     tmp = head;
     cur = head;
     while (tmp) {
         if (i == k) {
-            next = tmp->next;
+            nextGroup = tmp->next;
             //翻转cur->tmp
             start = cur;
-            end = tmp;
             
             pre = NULL;
             cur = start;
 
-            while (cur) {
+            while (cur && cur != tmp->next) {
                 next = cur->next;
                 cur->next = pre;
 
@@ -33,20 +33,26 @@ struct ListNode* reverseKGroup(struct ListNode* head, int k) {
             }
 
             if (NULL != preGroup) {
-                preGroup->next = pre;
+                preGroup->next = tmp;
             }
 
-            cur = next;
-            pre = tmp;
+            if (NULL == newHead) {
+                newHead = pre;
+            }
+
+            preGroup = start;
+            preGroup->next = nextGroup;
             i = 1;
         }
         tmp = tmp->next;
         i++;
     }
+
+    return newHead;
 }
 
 int main () {
-    LinkList *head;
+    ListNode *head;
     int a[] = {1,2,3,4,5,6,7,8,9};
     head = createListNodeFromArray(a, sizeof(a)/sizeof(int));
     head = reverseKGroup(head, 2);
