@@ -3,45 +3,42 @@
 #include "LinkList.h"
 
 struct ListNode* reverseKGroup(struct ListNode* head, int k) {
-    ListNode *tmp,*pre,*next,*cur,*preGroup,*nextGroup,*start,*end,*newHead;
+    ListNode *tmp,*pre,*next,*cur,*preGroup,*nextGroup,*start,*newHead;
     int i;
 
-    if (head == NULL) {
+    if (head == NULL || k == 1) {
         return head;
     }
 
     newHead = preGroup = tmp = pre = cur = next = NULL;
     i = 1;
 
-    tmp = head;
+    start = tmp = head;
     while (tmp) {
-        if (i == 1) {
-            start = tmp;
-        }
-
         if (i == k) {
+            //记录下一组
             nextGroup = tmp->next;
             
             cur = start;
             pre = NULL;
+            //翻转当前组
             while (i--) {
                 next = cur->next;
                 cur->next = pre;
-
                 pre = cur;
                 cur = next;
             }
 
             if (NULL != preGroup) {
-                preGroup->next = pre;
+                preGroup->next = tmp;
             }
 
             if (NULL == newHead) {
                 newHead = pre;
             }
 
-            tmp = nextGroup;
             preGroup = start;
+            tmp = start = nextGroup;
             i = 1;
             continue;
         }
