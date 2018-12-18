@@ -46,8 +46,12 @@ struct ListNode* reverseKGroup(struct ListNode* head, int k) {
         i++;
     }
 
-    if (nextGroup != NULL) {
+    if (nextGroup && preGroup) {
         preGroup->next = nextGroup;
+    }
+    
+    if (!newHead) {
+        newHead = head;
     }
 
     return newHead;
