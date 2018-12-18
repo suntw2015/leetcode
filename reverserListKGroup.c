@@ -14,17 +14,17 @@ struct ListNode* reverseKGroup(struct ListNode* head, int k) {
     i = 1;
 
     tmp = head;
-    cur = head;
     while (tmp) {
+        if (i == 1) {
+            start = tmp;
+        }
+
         if (i == k) {
             nextGroup = tmp->next;
-            //翻转cur->tmp
-            start = cur;
             
-            pre = NULL;
             cur = start;
-
-            while (cur && cur != tmp->next) {
+            pre = NULL;
+            while (i--) {
                 next = cur->next;
                 cur->next = pre;
 
@@ -33,19 +33,24 @@ struct ListNode* reverseKGroup(struct ListNode* head, int k) {
             }
 
             if (NULL != preGroup) {
-                preGroup->next = tmp;
+                preGroup->next = pre;
             }
 
             if (NULL == newHead) {
                 newHead = pre;
             }
 
+            tmp = nextGroup;
             preGroup = start;
-            preGroup->next = nextGroup;
             i = 1;
+            continue;
         }
         tmp = tmp->next;
         i++;
+    }
+
+    if (nextGroup != NULL) {
+        preGroup->next = nextGroup;
     }
 
     return newHead;
@@ -53,9 +58,9 @@ struct ListNode* reverseKGroup(struct ListNode* head, int k) {
 
 int main () {
     ListNode *head;
-    int a[] = {1,2,3,4,5,6,7,8,9};
+    int a[] = {1,2,3,4,5,6,7,8,9,10};
     head = createListNodeFromArray(a, sizeof(a)/sizeof(int));
-    head = reverseKGroup(head, 2);
+    head = reverseKGroup(head, 4);
     printListNode(head);
     return 0;
 }
