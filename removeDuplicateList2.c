@@ -10,42 +10,39 @@ struct ListNode* deleteDuplicates(struct ListNode* head) {
         return head;
     }
 
-    struct ListNode *tmp,*start,*newHead,*last;
-    int repeatCount = 0;
+    struct ListNode *last,*newHead,*pre,*cur,*next;
 
-    start = tmp = head;
-    newHead = NULL;
+    newHead = last = pre = NULL;
+    cur = head;
+    next = cur->next;
 
-    while (tmp) {
-        if (tmp != start && tmp->val != start->val) {
-            //只有一个
-            if (repeatCount == 0) {
-                if (!newHead) {
-                    newHead = start;
-                }
-                if (last) {
-                    last->next = start;
-                } else {
-                    last = start;
-                }
+    while (cur) {
+        if ((!pre || cur->val != pre->val) && (!next || cur->val != next->val)) {
+            if (!newHead) {
+                newHead = last = cur;
+            } else {
+                last->next = cur;
+                last = cur;
             }
-            start->next = tmp;
-            start = tmp;
-            repeatCount = 0;
         }
-        
-        tmp = tmp->next;
-        repeatCount++;
+
+        pre = cur;
+        cur = cur->next;
+        if (next) {
+            next = cur->next;
+        }
+    }
+    
+    if (last) {
+        last->next = NULL;
     }
 
-    start->next = NULL;
-
-    return head;
+    return newHead;
 }
 
 int main () {
     ListNode *head;
-    int a[] = {1,1,2,3,3,5,5,8,8,8,8,10};
+    int a[] = {1,1,3,3,5,5,8,8,8,8};
     head = createListNodeFromArray(a, sizeof(a)/sizeof(int));
     head = deleteDuplicates(head);
     printListNode(head);

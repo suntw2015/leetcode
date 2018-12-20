@@ -107,6 +107,7 @@ void printListNode(ListNode *head) {
 
     if (head == NULL) {
         printf("empty\n");
+        return;
     }
 
     while (n && n->next) {
